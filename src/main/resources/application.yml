@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: password
+    pool-size: 30
+---
+server:
+  error:
+    include-message: always
+  port: 8081
