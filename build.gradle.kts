@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
 	id("org.springframework.boot") version "2.7.6"
@@ -22,9 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("org.postgresql:postgresql:42.5.1")
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc:3.0.0")
-	implementation("org.flywaydb:flyway-core:9.10.1")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.5")
+	implementation("com.h2database:h2:2.1.214")
 	testImplementation("com.h2database:h2:2.1.214")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")

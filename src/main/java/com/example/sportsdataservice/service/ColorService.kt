@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ColorService(
-    @Autowired private val colorRepository: ColorRepository
+    private val colorRepository: ColorRepository
 ) {
     fun getAll(): MutableIterable<Color> = colorRepository.findAll()
 }

@@ -1,32 +1,37 @@
 package com.example.sportsdataservice.model
 
-import com.example.sportsdataservice.model.Color
-import com.example.sportsdataservice.model.ColorRef
-import com.example.sportsdataservice.model.HeadCoach
-import com.example.sportsdataservice.model.Location
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import com.example.sportsdataservice.dto.TeamDTO
 import java.util.*
-import java.util.stream.Collectors
-import kotlin.collections.HashSet
+import javax.persistence.*
 
 
-@Table("team")
+@Entity
 data class Team(
     @Id
-    val id: Int? = null,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0,
     var name: String = "",
     var establishedDate: Date = Date(),
     var stadium: String = "",
     var fightSong: String? = null,
     var mascot: String? = null,
+    @OneToOne
     var location: Location = Location(),
+    @OneToOne
     var headCoach: HeadCoach = HeadCoach(),
-    var colorIds: MutableSet<ColorRef> = HashSet()
+    @ManyToMany
+    var colors: List<Color> = emptyList()
 ) {
-    fun addColor(color: Color) = this.colorIds.add(ColorRef(color.id!!))
-
-    fun fetchColorIds(): Set<Int> = this.colorIds.stream()
-        .map(ColorRef::color)
-        .collect(Collectors.toSet())
+    fun toTeamDTO(): TeamDTO =
+        TeamDTO(
+            this.id,
+            this.name,
+            this.establishedDate,
+            this.stadium,
+            this.fightSong,
+            this.mascot,
+            this.location.toLocationDTO(),
+            this.headCoach.toHeadCoachDTO(),
+            this.colors.map { it.toColorDTO() }
+        )
 }

@@ -1,10 +1,22 @@
 package com.example.sportsdataservice.model
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import com.example.sportsdataservice.dto.ColorDTO
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
-@Table("color")
+@Entity
 data class Color(
-    @Id val id: Int? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = 0,
     var name: String = ""
-)
+) {
+
+    fun toColorDTO(): ColorDTO =
+        ColorDTO(
+            this.id,
+            this.name
+        )
+}

@@ -1,9 +1,8 @@
 package com.example.sportsdataservice.repository
 
-import com.example.sportsdataservice.model.Team
+import com.example.sportsdataservice.model.Location
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TeamRepository : JpaRepository<Team, Long>
+interface LocationRepository: JpaRepository<Location, Long>

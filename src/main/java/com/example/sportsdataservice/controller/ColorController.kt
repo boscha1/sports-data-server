@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/color")
-class ColorController(
-    @Autowired private val colorService: ColorService
-) {
+@RequestMapping("/api/v1/color")
+class ColorController(@Autowired private val colorService: ColorService) {
+
     @GetMapping("/")
     fun readAll() = colorService.getAll()
 }
