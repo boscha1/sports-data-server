@@ -19,8 +19,8 @@ class TeamController(
     fun read(@PathVariable id: Long) = ResponseEntity.ok(teamService.getOne(id))
 
     @PostMapping("/")
-    fun createTeam(@RequestBody teamDTO: TeamDTO) = ResponseEntity.ok(teamService.createOne(teamDTO))
+    fun create(@RequestBody teamDTO: TeamDTO) = ResponseEntity.ok(teamService.createOne(teamDTO))
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody team: TeamDTO) = ResponseEntity.ok(teamService.updateOne(id, team))
+    fun update(@PathVariable id: Long, @RequestBody teamDTO: TeamDTO) = ResponseEntity.ok(teamService.updateOne(id, teamDTO))
 }

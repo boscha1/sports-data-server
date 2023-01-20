@@ -29,7 +29,7 @@ class HeadCoachService(
 
     fun updateOne(id: Long, headCoachDTO: HeadCoachDTO): HeadCoachDTO {
         val headCoach = headCoachRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Team not found with id: $id") }
+            .orElseThrow { EntityNotFoundException("Head Coach not found with id: $id") }
 
         headCoach.firstName = headCoachDTO.firstName
         headCoach.lastName = headCoachDTO.lastName

@@ -20,7 +20,7 @@ class HeadCoachController(
     fun read(@PathVariable id: Long) = ResponseEntity.ok(headCoachService.getOne(id))
 
     @PostMapping("/")
-    fun createTeam(@RequestBody headCoachDTO: HeadCoachDTO) = ResponseEntity.ok(headCoachService.createOne(headCoachDTO))
+    fun create(@RequestBody headCoachDTO: HeadCoachDTO) = ResponseEntity.ok(headCoachService.createOne(headCoachDTO))
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody headCoachDTO: HeadCoachDTO) = ResponseEntity.ok(headCoachService.updateOne(id, headCoachDTO))

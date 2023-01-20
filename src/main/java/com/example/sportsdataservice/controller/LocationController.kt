@@ -20,7 +20,7 @@ class LocationController(
     fun read(@PathVariable id: Long) = ResponseEntity.ok(locationService.getOne(id))
 
     @PostMapping("/")
-    fun createTeam(@RequestBody locationDTO: LocationDTO) = ResponseEntity.ok(locationService.createOne(locationDTO))
+    fun create(@RequestBody locationDTO: LocationDTO) = ResponseEntity.ok(locationService.createOne(locationDTO))
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody locationDTO: LocationDTO) = ResponseEntity.ok(locationService.updateOne(id, locationDTO))

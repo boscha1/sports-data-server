@@ -28,7 +28,7 @@ class LocationService(
 
     fun updateOne(id: Long, locationDto: LocationDTO): LocationDTO {
         val location = locationRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Team not found with id: $id") }
+            .orElseThrow { EntityNotFoundException("Location not found with id: $id") }
 
         location.city = locationDto.city
         location.state = locationDto.state
