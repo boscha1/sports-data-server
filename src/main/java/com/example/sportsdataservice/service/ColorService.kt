@@ -3,7 +3,6 @@ package com.example.sportsdataservice.service
 import com.example.sportsdataservice.dto.ColorDTO
 import com.example.sportsdataservice.model.Color
 import com.example.sportsdataservice.repository.ColorRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
 

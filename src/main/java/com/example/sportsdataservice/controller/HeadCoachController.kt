@@ -1,7 +1,6 @@
 package com.example.sportsdataservice.controller
 
 import com.example.sportsdataservice.dto.HeadCoachDTO
-import com.example.sportsdataservice.dto.LocationDTO
 import com.example.sportsdataservice.service.HeadCoachService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
