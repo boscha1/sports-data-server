@@ -7,9 +7,9 @@ data class TeamDTO(
     var id: Long = 0,
     var name: String = "",
     var establishedDate: Date = Date(),
-    var stadium: String = "",
     var fightSong: String? = null,
     var mascot: String? = null,
+    var stadiums: List<StadiumDTO> = emptyList(),
     var location: LocationDTO = LocationDTO(),
     var headCoach: HeadCoachDTO = HeadCoachDTO(),
     var colors: List<ColorDTO> = emptyList()
@@ -19,7 +19,6 @@ data class TeamDTO(
             this.id,
             this.name,
             this.establishedDate,
-            this.stadium,
             this.fightSong,
             this.mascot
         )

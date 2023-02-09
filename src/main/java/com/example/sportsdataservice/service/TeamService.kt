@@ -2,10 +2,7 @@ package com.example.sportsdataservice.service
 
 import com.example.sportsdataservice.dto.TeamDTO
 import com.example.sportsdataservice.model.Team
-import com.example.sportsdataservice.repository.ColorRepository
-import com.example.sportsdataservice.repository.HeadCoachRepository
-import com.example.sportsdataservice.repository.LocationRepository
-import com.example.sportsdataservice.repository.TeamRepository
+import com.example.sportsdataservice.repository.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
@@ -15,7 +12,8 @@ class TeamService(
     @Autowired private val teamRepository: TeamRepository,
     @Autowired private val headCoachRepository: HeadCoachRepository,
     @Autowired private val locationRepository: LocationRepository,
-    @Autowired private val colorRepository: ColorRepository
+    @Autowired private val colorRepository: ColorRepository,
+    @Autowired private val stadiumRepository: StadiumRepository
 ) {
     fun getAll(): List<TeamDTO> = teamRepository.findAll().map { it.toTeamDTO() }
 
@@ -27,13 +25,14 @@ class TeamService(
         val headCoach = headCoachRepository.findById(teamDto.headCoach.id)
             .orElseThrow { EntityNotFoundException("Head Coach not found with id: ${teamDto.headCoach.id}") }
         val colors = teamDto.colors.map { colorRepository.findById(it.id).orElseThrow { EntityNotFoundException("Color not found with id: ${it.id}") } }
+        val stadiums = teamDto.stadiums.map { stadiumRepository.findById(it.id).orElseThrow { EntityNotFoundException("Stadium not found with id: ${it.id}") } }
 
         val team = Team(
             name = teamDto.name,
             establishedDate = teamDto.establishedDate,
-            stadium = teamDto.stadium,
             fightSong = teamDto.fightSong,
             mascot = teamDto.mascot,
+            stadiums = stadiums,
             location = location,
             headCoach = headCoach,
             colors = colors
@@ -55,16 +54,21 @@ class TeamService(
         team.headCoach = headCoach
 
         if (teamDto.colors.isNotEmpty()) {
-            val colors = teamDto.colors.map {
+            team.colors = teamDto.colors.map {
                 colorRepository.findById(it.id)
                     .orElseThrow { EntityNotFoundException("Color not found with id: ${it.id}") }
             }
-            team.colors = colors
+        }
+
+        if (teamDto.stadiums.isNotEmpty()) {
+            team.stadiums = teamDto.stadiums.map {
+                stadiumRepository.findById(it.id)
+                    .orElseThrow { EntityNotFoundException("Stadium not found with id: ${it.id}") }
+            }
         }
 
         team.name = teamDto.name
         team.establishedDate = teamDto.establishedDate
-        team.stadium = teamDto.stadium
         team.fightSong = teamDto.fightSong
         team.mascot = teamDto.mascot
 

@@ -4,7 +4,6 @@ import com.example.sportsdataservice.dto.TeamDTO
 import java.util.*
 import javax.persistence.*
 
-
 @Entity
 data class Team(
     @Id
@@ -12,9 +11,10 @@ data class Team(
     val id: Long = 0,
     var name: String = "",
     var establishedDate: Date = Date(),
-    var stadium: String = "",
     var fightSong: String? = null,
     var mascot: String? = null,
+    @ManyToMany
+    var stadiums: List<Stadium> = emptyList(),
     @OneToOne
     var location: Location = Location(),
     @OneToOne
@@ -27,9 +27,9 @@ data class Team(
             this.id,
             this.name,
             this.establishedDate,
-            this.stadium,
             this.fightSong,
             this.mascot,
+            this.stadiums.map { it.toStadiumDTO() },
             this.location.toLocationDTO(),
             this.headCoach.toHeadCoachDTO(),
             this.colors.map { it.toColorDTO() }
