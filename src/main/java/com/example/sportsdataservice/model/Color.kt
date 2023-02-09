@@ -11,12 +11,14 @@ data class Color(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = 0,
-    var name: String = ""
+    var name: String = "",
+    var hexCode: String = ""
 ) {
 
     fun toColorDTO(): ColorDTO =
         ColorDTO(
             this.id,
-            this.name
+            this.name,
+            this.hexCode
         )
 }
