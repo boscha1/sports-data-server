@@ -1,7 +1,6 @@
 package com.example.sportsdataservice.service
 
 import com.example.sportsdataservice.dto.TeamDTO
-import com.example.sportsdataservice.model.Team
 import com.example.sportsdataservice.repository.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,33 +14,26 @@ class TeamService(
     @Autowired private val colorRepository: ColorRepository,
     @Autowired private val stadiumRepository: StadiumRepository
 ) {
-    fun getAll(): List<TeamDTO> = teamRepository.findAll().map { it.toTeamDTO() }
-
-    fun getOne(id: Long): TeamDTO = teamRepository.findById(id).orElse(null).toTeamDTO()
-
-    fun createOne(teamDto: TeamDTO): Team {
-        val location = locationRepository.findById(teamDto.location.id)
-            .orElseThrow { EntityNotFoundException("Location not found with id: ${teamDto.location.id}") }
-        val headCoach = headCoachRepository.findById(teamDto.headCoach.id)
-            .orElseThrow { EntityNotFoundException("Head Coach not found with id: ${teamDto.headCoach.id}") }
-        val colors = teamDto.colors.map { colorRepository.findById(it.id).orElseThrow { EntityNotFoundException("Color not found with id: ${it.id}") } }
-        val stadiums = teamDto.stadiums.map { stadiumRepository.findById(it.id).orElseThrow { EntityNotFoundException("Stadium not found with id: ${it.id}") } }
-
-        val team = Team(
-            name = teamDto.name,
-            establishedDate = teamDto.establishedDate,
-            fightSong = teamDto.fightSong,
-            mascot = teamDto.mascot,
-            stadiums = stadiums,
-            location = location,
-            headCoach = headCoach,
-            colors = colors
-        )
-
-        return teamRepository.save(team)
+    fun getTeams(
+        ids: List<String>? = null
+    ): List<TeamDTO> {
+        return if (ids != null) {
+            getTeamsById(ids)
+        } else {
+            getAllTeams()
+        }
     }
 
-    fun updateOne(id: Long, teamDto: TeamDTO): TeamDTO {
+    private fun getAllTeams(): List<TeamDTO> =
+        teamRepository.findAll().map { it.toTeamDTO() }
+
+    private fun getTeamsById(ids: List<String>): List<TeamDTO> =
+        ids.map { teamRepository.findById(it) }
+            .filter { it.isPresent }
+            .map { it.get().toTeamDTO() }
+
+
+    fun updateTeam(id: String, teamDto: TeamDTO): String {
         val team = teamRepository.findById(id)
             .orElseThrow { EntityNotFoundException("Team not found with id: $id") }
 
@@ -61,17 +53,19 @@ class TeamService(
         }
 
         if (teamDto.stadiums.isNotEmpty()) {
-            team.stadiums = teamDto.stadiums.map {
-                stadiumRepository.findById(it.id)
-                    .orElseThrow { EntityNotFoundException("Stadium not found with id: ${it.id}") }
+            team.teamStadiums.map {
+                val stadiumId = it.stadium.id
+                stadiumRepository.findById(stadiumId)
+                    .orElseThrow { EntityNotFoundException("Stadium not found with id: $stadiumId") }
             }
         }
 
         team.name = teamDto.name
+        team.prefix = teamDto.prefix
         team.establishedDate = teamDto.establishedDate
         team.fightSong = teamDto.fightSong
         team.mascot = teamDto.mascot
 
-        return teamRepository.save(team).toTeamDTO()
+        return teamRepository.save(team).id
     }
 }

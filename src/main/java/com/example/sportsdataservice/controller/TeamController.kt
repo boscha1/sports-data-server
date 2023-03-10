@@ -1,10 +1,15 @@
 package com.example.sportsdataservice.controller
 
 import com.example.sportsdataservice.dto.TeamDTO
+import com.example.sportsdataservice.model.Team
+import com.example.sportsdataservice.model.response.TeamData
+import com.example.sportsdataservice.model.response.TeamList
 import com.example.sportsdataservice.service.TeamService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/teams")
@@ -12,15 +17,30 @@ import org.springframework.web.bind.annotation.*
 class TeamController(
     @Autowired private val teamService: TeamService
 ) {
-    @GetMapping("/")
-    fun readAll() = ResponseEntity.ok(teamService.getAll())
+    @GetMapping(
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun readAll(): ResponseEntity<TeamData> {
+        val teams = teamService.getTeams()
+        return ResponseEntity.ok(TeamData(TeamList(teams)))
+    }
 
-    @GetMapping("/{id}")
-    fun read(@PathVariable id: Long) = ResponseEntity.ok(teamService.getOne(id))
+    @GetMapping(
+        value = ["{ids}"],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun getTeamsById(@PathVariable("ids") teamIds: List<String>): ResponseEntity<TeamData> {
+        val teams = teamService.getTeams(teamIds)
+        return ResponseEntity.ok(TeamData(TeamList(teams)))
+    }
 
-    @PostMapping("/")
-    fun create(@RequestBody teamDTO: TeamDTO) = ResponseEntity.ok(teamService.createOne(teamDTO))
-
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody teamDTO: TeamDTO) = ResponseEntity.ok(teamService.updateOne(id, teamDTO))
+    @PutMapping(
+        value = ["{id}"],
+        consumes = [MediaType.APPLICATION_JSON_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+    )
+    fun update(@PathVariable("id") id: String, @RequestBody teamDTO: TeamDTO): ResponseEntity<String> {
+        val teamId = teamService.updateTeam(id, teamDTO)
+        return ResponseEntity.ok(teamId)
+    }
 }
