@@ -26,7 +26,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.5")
 	implementation("com.h2database:h2:2.1.214")
 	testImplementation("com.h2database:h2:2.1.214")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module = "mockito-core")
+	}
+	testImplementation("com.ninja-squad:springmockk:3.0.1")
 	testImplementation("io.projectreactor:reactor-test")
 }
 
