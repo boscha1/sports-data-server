@@ -1,5 +1,6 @@
 package com.example.sportsdataservice.dto
 
+import com.example.sportsdataservice.model.Stadium
 import java.util.*
 
 data class StadiumDTO(

@@ -1,6 +1,8 @@
 package com.example.sportsdataservice.service
 
-import com.example.sportsdataservice.dto.TeamDTO
+import com.example.sportsdataservice.dto.*
+import com.example.sportsdataservice.model.Team
+import com.example.sportsdataservice.model.TeamStadium
 import com.example.sportsdataservice.repository.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,7 +17,7 @@ class TeamService(
     @Autowired private val stadiumRepository: StadiumRepository
 ) {
     fun getTeams(
-        ids: List<String>? = null
+        ids: List<Long>? = null
     ): List<TeamDTO> {
         return if (ids != null) {
             getTeamsById(ids)
@@ -27,45 +29,65 @@ class TeamService(
     private fun getAllTeams(): List<TeamDTO> =
         teamRepository.findAll().map { it.toTeamDTO() }
 
-    private fun getTeamsById(ids: List<String>): List<TeamDTO> =
+    private fun getTeamsById(ids: List<Long>): List<TeamDTO> =
         ids.map { teamRepository.findById(it) }
             .filter { it.isPresent }
             .map { it.get().toTeamDTO() }
 
 
-    fun updateTeam(id: String, teamDto: TeamDTO): String {
-        val team = teamRepository.findById(id)
-            .orElseThrow { EntityNotFoundException("Team not found with id: $id") }
+    fun updateTeam(id: Long, updatedTeam: TeamDTO): Long {
+        val team = teamRepository.findById(id).orElseThrow { EntityNotFoundException() }
 
-        val location = locationRepository.findById(teamDto.location.id)
-            .orElseThrow { EntityNotFoundException("Location not found with id: ${teamDto.location.id}") }
-        team.location = location
+        updateTeamLocation(team, updatedTeam.location)
+        updateTeamHeadCoach(team, updatedTeam.headCoach)
+        updateTeamColors(team, updatedTeam.colors)
+        updateTeamStadiums(team, updatedTeam.stadiums)
 
-        val headCoach = headCoachRepository.findById(teamDto.headCoach.id)
-            .orElseThrow { EntityNotFoundException("Head Coach not found with id: ${teamDto.headCoach.id}") }
-        team.headCoach = headCoach
-
-        if (teamDto.colors.isNotEmpty()) {
-            team.colors = teamDto.colors.map {
-                colorRepository.findById(it.id)
-                    .orElseThrow { EntityNotFoundException("Color not found with id: ${it.id}") }
-            }
+        team.apply {
+            name = updatedTeam.name
+            prefix = updatedTeam.prefix
+            establishedDate = updatedTeam.establishedDate
+            fightSong = updatedTeam.fightSong
+            mascot = updatedTeam.mascot
         }
 
-        if (teamDto.stadiums.isNotEmpty()) {
-            team.teamStadiums.map {
-                val stadiumId = it.stadium.id
-                stadiumRepository.findById(stadiumId)
-                    .orElseThrow { EntityNotFoundException("Stadium not found with id: $stadiumId") }
+        try {
+            return teamRepository.save(team).id
+        } catch (e: Exception) {
+            throw IllegalStateException()
+        }
+    }
+
+    private fun updateTeamLocation(team: Team, updatedLocation: LocationDTO?) {
+        updatedLocation?.let { location ->
+            team.location = locationRepository.findById(location.id)
+                .orElseThrow { EntityNotFoundException() }
+        }
+    }
+
+    private fun updateTeamHeadCoach(team: Team, updatedHeadCoach: HeadCoachDTO?) {
+        updatedHeadCoach?.let { headCoach ->
+            team.headCoach = headCoachRepository.findById(headCoach.id)
+                .orElseThrow { EntityNotFoundException() }
+        }
+    }
+
+    private fun updateTeamColors(team: Team, updatedColors: List<ColorDTO>?) {
+        updatedColors?.let { colors ->
+            team.colors = colors.map { colorDto ->
+                colorRepository.findById(colorDto.id)
+                    .orElseThrow { EntityNotFoundException() }
             }
         }
+    }
 
-        team.name = teamDto.name
-        team.prefix = teamDto.prefix
-        team.establishedDate = teamDto.establishedDate
-        team.fightSong = teamDto.fightSong
-        team.mascot = teamDto.mascot
-
-        return teamRepository.save(team).id
+    private fun updateTeamStadiums(team: Team, updatedStadiums: List<StadiumDTO>?) {
+        updatedStadiums?.let { stadiums ->
+            team.teamStadiums = stadiums.map { stadiumDto ->
+                val stadiumEntity = stadiumRepository.findById(stadiumDto.id)
+                    .orElseThrow { EntityNotFoundException() }
+                TeamStadium(1, team, stadiumEntity, stadiumDto.fromDate, stadiumDto.toDate)
+            }
+        }
     }
 }

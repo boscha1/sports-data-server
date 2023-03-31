@@ -4,7 +4,7 @@ import com.example.sportsdataservice.model.Team
 import java.util.*
 
 data class TeamDTO(
-    var id: String = "",
+    var id: Long = 0,
     var name: String = "",
     var prefix: String = "",
     var establishedDate: Date = Date(),

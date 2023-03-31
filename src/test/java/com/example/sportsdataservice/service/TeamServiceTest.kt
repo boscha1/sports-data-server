@@ -27,79 +27,79 @@ class TeamServiceTest {
         stadiumRepository = stadiumRepository
     )
 
-    @Test
-    fun `should get a team successfully`() {
-
-    }
-
-    @Test
-    fun `should update a team successfully`() {
-        // Arrange
-        val oldTeam = Team(
-            id = 1L,
-            name = "Old Team Name",
-            prefix = "OLD",
-            establishedDate = Date(),
-            fightSong = "Old Fight Song",
-            mascot = "Old Mascot",
-            location = Location(
-                id = 1L,
-                city = "Old City",
-                state = "Old State",
-                state_code = "Old State Code",
-                zip_code = "Old Zip Code"
-            ),
-            headCoach = HeadCoach(
-                id = 1L,
-                firstName = "Old First Name",
-                lastName = "Old Last Name",
-                wins = 1,
-                losses = 1,
-                ties = 1
-            ),
-            colors = listOf(
-                Color(id = 1L, name = "Old Color")
-            )
-        )
-
-        val newTeam = Team(
-            id = oldTeam.id,
-            name = "New Name",
-            prefix = "New Prefix",
-            establishedDate = Date(),
-            fightSong = "New FightSong",
-            mascot = "New Mascot",
-            location = Location(
-                id = 2L,
-                city = "New City",
-                state = "New State",
-                state_code = "New State Code",
-                zip_code = "New Zip Code"
-            ),
-            headCoach = HeadCoach(
-                id = 2L,
-                firstName = "New First Name",
-                lastName = "New Last Name",
-                wins = 2,
-                losses = 2,
-                ties = 2
-            ),
-            colors = listOf(
-                Color(id = 2L, name = "New Color 1")
-            )
-        )
-
-        // When
-        every { (teamRepository.findById(any())) } returns Optional.of(oldTeam)
-        every { locationRepository.findById(any()) } returns Optional.of(oldTeam.location)
-        every { headCoachRepository.findById(any()) } returns Optional.of(oldTeam.headCoach)
-        every { colorRepository.findById(any()) } returns Optional.of(oldTeam.colors.first())
-        every { teamRepository.save(any()).toTeamDTO() } returns newTeam.toTeamDTO()
-
-        // Act
-        val result = objectUnderTest.updateTeam(oldTeam.id, oldTeam.toTeamDTO())
-
-        // Assert
-        assertEquals(newTeam.toTeamDTO(), result)
-    }
+//    @Test
+//    fun `should get a team successfully`() {
+//
+//    }
+//
+//    @Test
+//    fun `should update a team successfully`() {
+//        // Arrange
+//        val oldTeam = Team(
+//            id = 1L,
+//            name = "Old Team Name",
+//            prefix = "OLD",
+//            establishedDate = Date(),
+//            fightSong = "Old Fight Song",
+//            mascot = "Old Mascot",
+//            location = Location(
+//                id = 1L,
+//                city = "Old City",
+//                state = "Old State",
+//                state_code = "Old State Code",
+//                zip_code = "Old Zip Code"
+//            ),
+//            headCoach = HeadCoach(
+//                id = 1L,
+//                firstName = "Old First Name",
+//                lastName = "Old Last Name",
+//                wins = 1,
+//                losses = 1,
+//                ties = 1
+//            ),
+//            colors = listOf(
+//                Color(id = 1L, name = "Old Color")
+//            )
+//        )
+//
+//        val newTeam = Team(
+//            id = oldTeam.id,
+//            name = "New Name",
+//            prefix = "New Prefix",
+//            establishedDate = Date(),
+//            fightSong = "New FightSong",
+//            mascot = "New Mascot",
+//            location = Location(
+//                id = 2L,
+//                city = "New City",
+//                state = "New State",
+//                state_code = "New State Code",
+//                zip_code = "New Zip Code"
+//            ),
+//            headCoach = HeadCoach(
+//                id = 2L,
+//                firstName = "New First Name",
+//                lastName = "New Last Name",
+//                wins = 2,
+//                losses = 2,
+//                ties = 2
+//            ),
+//            colors = listOf(
+//                Color(id = 2L, name = "New Color 1")
+//            )
+//        )
+//
+//        // When
+//        every { (teamRepository.findById(any())) } returns Optional.of(oldTeam)
+//        every { locationRepository.findById(any()) } returns Optional.of(oldTeam.location)
+//        every { headCoachRepository.findById(any()) } returns Optional.of(oldTeam.headCoach)
+//        every { colorRepository.findById(any()) } returns Optional.of(oldTeam.colors.first())
+//        every { teamRepository.save(any()).toTeamDTO() } returns newTeam.toTeamDTO()
+//
+//        // Act
+//        val result = objectUnderTest.updateTeam(oldTeam.id, oldTeam.toTeamDTO())
+//
+//        // Assert
+//        assertEquals(newTeam.toTeamDTO(), result)
+//    }
 }

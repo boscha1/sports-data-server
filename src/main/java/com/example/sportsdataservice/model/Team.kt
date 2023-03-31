@@ -8,7 +8,7 @@ import javax.persistence.*
 data class Team(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: String = "",
+    val id: Long = 0,
     var name: String = "",
     var prefix: String = "",
     var establishedDate: Date = Date(),

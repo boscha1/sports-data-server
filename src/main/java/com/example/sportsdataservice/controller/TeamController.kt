@@ -1,7 +1,5 @@
 package com.example.sportsdataservice.controller
 
-import com.example.sportsdataservice.dto.TeamDTO
-import com.example.sportsdataservice.model.Team
 import com.example.sportsdataservice.model.response.TeamData
 import com.example.sportsdataservice.model.response.TeamList
 import com.example.sportsdataservice.service.TeamService
@@ -29,18 +27,18 @@ class TeamController(
         value = ["{ids}"],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun getTeamsById(@PathVariable("ids") teamIds: List<String>): ResponseEntity<TeamData> {
+    fun getTeamsById(@PathVariable("ids") teamIds: List<Long>): ResponseEntity<TeamData> {
         val teams = teamService.getTeams(teamIds)
         return ResponseEntity.ok(TeamData(TeamList(teams)))
     }
 
-    @PutMapping(
-        value = ["{id}"],
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE],
-    )
-    fun update(@PathVariable("id") id: String, @RequestBody teamDTO: TeamDTO): ResponseEntity<String> {
-        val teamId = teamService.updateTeam(id, teamDTO)
-        return ResponseEntity.ok(teamId)
-    }
+//    @PutMapping(
+//        value = ["{id}"],
+//        consumes = [MediaType.APPLICATION_JSON_VALUE],
+//        produces = [MediaType.APPLICATION_JSON_VALUE],
+//    )
+//    fun update(@PathVariable("id") id: Long, @RequestBody teamDTO: TeamDTO): ResponseEntity<Long> {
+//        val teamId = teamService.updateTeam(id, teamDTO)
+//        return ResponseEntity.ok(teamId)
+//    }
 }
