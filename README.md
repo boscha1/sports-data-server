@@ -1,9 +1,7 @@
 # NFL Team Data Server
 
 - This is a Spring Boot Kotlin application that allows you to store and manage information about NFL teams. 
-
 - The application stores information about teams' head coaches, locations, colors, and stadiums. 
-
 - It uses an embedded H2 database to store all the data.
 
 ## Installation
